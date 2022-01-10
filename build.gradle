@@ -1,0 +1,34 @@
+plugins {
+    // Applying this plugin casuses build to fail
+    // comment out line for a successful build
+    id 'me.champeau.jmh' version '0.6.6'
+}
+
+defaultTasks 'eclipseClasspath'
+
+allprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'eclipse'
+}
+
+dependencies {
+    // ALSO: change this to testImplementation, testRuntimeOnly, or compileOnly for successful build
+    testCompileOnly project(':subproject')
+}
+
+def dependencyFound = new boolean[1];
+
+eclipse.classpath.file.whenMerged { classpath ->
+    classpath.entries.each { entry ->
+        if (entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency) {
+            println "Found dependency: $entry"
+            dependencyFound[0] = true
+        }
+    }
+}
+
+gradle.buildFinished {
+    if (!dependencyFound[0]) {
+        throw new GradleException("The project dependency should have been included in eclipse classpath!");
+    }
+}

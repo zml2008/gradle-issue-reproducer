@@ -1,1 +1,9 @@
 rootProject.name = 'reproducer-project'
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+include 'subproject'
