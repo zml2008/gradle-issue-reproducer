@@ -14,4 +14,8 @@ jobs:
         java-version: 11
     - uses: gradle/gradle-build-action@v2
       with:
-        arguments: help --info
+        arguments: assemble --warning-mode=fail
+    - uses: gradle/gradle-build-action@v2
+      with:
+        # This will silently be incorrect
+        arguments: clean printJavaSources --warning-mode=fail

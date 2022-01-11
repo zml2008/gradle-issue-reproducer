@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'antlr'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr 'org.antlr:antlr4:4.9.2'
+}
+
+// fails with warning
+java.withSourcesJar()
+
+// silently produces incorrect output!
+def toList = sourceSets.main.java
+task printJavaSources {
+    inputs.files(toList)
+    
+    doLast {
+        logger.lifecycle "Source files"
+        toList.each {
+            logger.lifecycle it.toString()
+        }
+    }
+}
